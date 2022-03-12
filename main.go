@@ -23,6 +23,16 @@ func checkIfOrderValid(orderValid *bool) bool {
 	return true
 }
 
+func readArguments() string {
+	argumentsString := ""
+	for _, v := range os.Args[1:] {
+		argumentsString += v + " "
+	}
+	argumentsString = argumentsString[:len(argumentsString)-1]
+	argumentsString = strings.ToLower(argumentsString)
+	return argumentsString
+}
+
 func main() {
 
 	var listOfBooks = []string{
@@ -42,29 +52,26 @@ func main() {
 	}
 
 	if orderValid {
-		if strings.ToLower(os.Args[1]) == "list" { // If the order is to list all the books
+
+		// arguments in the lower case string format
+		argumentsString := readArguments()
+
+		switch argumentsString {
+		case "list":
 			fmt.Println("--- LIST OF ALL BOOKS ---")
 			for _, v := range listOfBooks {
 				fmt.Println(v)
 			}
-		} else { // If the order is to search for the book
 
-			// create a string out of given arguments
-			var keyToSearch string
-			for _, v := range os.Args[1:] {
-				keyToSearch += v + " "
-			}
-
-			// remove the last character " " space
-			keyToSearch = keyToSearch[:len(keyToSearch)-1]
-
+		default:
 			// check if the slice contains the given book name
-			b, s := checkContains(listOfBooks, keyToSearch)
+			b, s := checkContains(listOfBooks, argumentsString)
 			if b {
 				fmt.Println(s)
 			} else {
-				fmt.Println("Sorry,", keyToSearch, "doesn't exist in our archive. Come later")
+				fmt.Println("Sorry,", argumentsString, "doesn't exist in our archive. Come later")
 			}
+
 		}
 	}
 }
