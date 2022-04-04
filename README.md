@@ -10,4 +10,4 @@ This app has 2 functionalities.
 
 Use the arguments to make this app work.      
 Command **go run main.go list** to list all the books      
-Command **go run main.go typeYourBookName** to search      
+Command **go run main.go search typeYourBookName** to search      
