@@ -23,14 +23,15 @@ func checkIfOrderValid(orderValid *bool) bool {
 	return true
 }
 
-func readArguments() string {
+func readArguments() (string, []string) {
 	argumentsString := ""
-	for _, v := range os.Args[1:] {
+	arguments := os.Args[1:]
+	for _, v := range arguments {
 		argumentsString += v + " "
 	}
 	argumentsString = argumentsString[:len(argumentsString)-1]
 	argumentsString = strings.ToLower(argumentsString)
-	return argumentsString
+	return argumentsString, arguments
 }
 
 func main() {
@@ -54,22 +55,27 @@ func main() {
 	if orderValid {
 
 		// arguments in the lower case string format
-		argumentsString := readArguments()
+		_, argumentsStringArr := readArguments()
 
-		switch argumentsString {
+		switch argumentsStringArr[0] {
 		case "list":
 			fmt.Println("--- LIST OF ALL BOOKS ---")
 			for _, v := range listOfBooks {
 				fmt.Println(v)
 			}
 
-		default:
+		case "search":
 			// check if the slice contains the given book name
-			b, s := checkContains(listOfBooks, argumentsString)
+			wordToSearch := ""
+			for _, v := range argumentsStringArr[1:] {
+				wordToSearch += v + " "
+			}
+			wordToSearch = wordToSearch[:len(wordToSearch)-1]
+			b, s := checkContains(listOfBooks, wordToSearch)
 			if b {
 				fmt.Println(s)
 			} else {
-				fmt.Println("Sorry,", argumentsString, "doesn't exist in our archive. Come later")
+				fmt.Println("Sorry,", wordToSearch, "doesn't exist in our archive. Come later")
 			}
 
 		}
